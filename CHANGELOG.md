@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fix regression in `Interactivity` using MVT and polygons
+- Fix general failure using `Edge 18`
 
 ## [1.1.1] - 2019-01-16
 
