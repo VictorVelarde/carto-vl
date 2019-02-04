@@ -20,9 +20,6 @@ describe('CARTO VL browser tests in...', () => {
         const serverUrl = 'http://localhost:4445/wd/hub';
         // const serverUrl = `http://${username}:${accessKey}@ondemand.saucelabs.com:80/wd/hub`;
 
-        let chromeOptions = new chrome.Options();
-        chromeOptions.addArguments(['--allow-insecure-localhost']);
-
         let capabilities = {
             'browserName': browser.browserName,
             'platform': browser.platform,
@@ -35,13 +32,17 @@ describe('CARTO VL browser tests in...', () => {
             'extendedDebugging': true,
             'tunnel-identifier': 'cartovl-tunnel'
         };
-
         driver = new webdriver.Builder()
             .withCapabilities(capabilities)
-            .forBrowser('chrome')
-            .setChromeOptions(chromeOptions)
-            .usingServer(serverUrl)
-            .build();
+            .usingServer(serverUrl);
+
+        if (browser.browserName === 'chrome') {
+            let chromeOptions = new chrome.Options();
+            chromeOptions.addArguments(['--allow-insecure-localhost']);
+            driver.forBrowser('chrome').setChromeOptions(chromeOptions);
+        }
+
+        driver.build();
 
         driver.getSession().then(function (sessionid) {
             driver.sessionID = sessionid.id_;
@@ -75,7 +76,7 @@ describe('CARTO VL browser tests in...', () => {
                 done();
             });
 
-            it('should load a basic layer', function (done) {
+            it(`${testName} should load a basic layer`, function (done) {
                 testBasicLayerLoads(done);
             });
         });
