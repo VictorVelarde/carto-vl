@@ -32,17 +32,23 @@ describe('CARTO VL browser tests in...', () => {
             'extendedDebugging': true,
             'tunnel-identifier': 'cartovl-tunnel'
         };
-        driver = new webdriver.Builder()
-            .withCapabilities(capabilities)
-            .usingServer(serverUrl);
 
         if (browser.browserName === 'chrome') {
             let chromeOptions = new chrome.Options();
             chromeOptions.addArguments(['--allow-insecure-localhost']);
-            driver.forBrowser('chrome').setChromeOptions(chromeOptions);
-        }
 
-        driver.build();
+            driver = new webdriver.Builder()
+                .withCapabilities(capabilities)
+                .forBrowser('chrome')
+                .setChromeOptions(chromeOptions)
+                .usingServer(serverUrl)
+                .build();
+        } else {
+            driver = new webdriver.Builder()
+                .withCapabilities(capabilities)
+                .usingServer(serverUrl)
+                .build();
+        }
 
         driver.getSession().then(function (sessionid) {
             driver.sessionID = sessionid.id_;
